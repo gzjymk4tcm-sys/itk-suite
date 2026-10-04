@@ -2,7 +2,7 @@
    Versija = index.html satura jaucējkods, tāpēc katra jauna publikācija
    automātiski nomaina kešatmiņu. Kešs vispirms: lietotne atveras uzreiz
    un strādā bez tīkla; jaunā versija tiek lejupielādēta fonā. */
-const VERSION = 'c6e8b4557ce8';
+const VERSION = 'bf62146e1e76';
 const CACHE = 'itk-' + VERSION;
 const FILES = ['./', './index.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
