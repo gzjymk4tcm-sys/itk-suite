@@ -88,11 +88,21 @@
       --local-text-2: oklch(0.38 0.015 260);
       --shadow-pop: 0 18px 40px -16px oklch(0 0 0 / 0.6);
       --scrim: oklch(0.08 0.005 260 / 0.62);
+      /* tilpums: augšējā gaismas mala + mīksta ēna (tumšajā tēmā ēnas vājākas, mala svarīgāka) */
+      --hl: inset 0 1px 0 oklch(1 0 0 / 0.06);
+      --elev-1: inset 0 1px 0 oklch(1 0 0 / 0.05), 0 1px 2px oklch(0 0 0 / 0.35), 0 6px 16px -8px oklch(0 0 0 / 0.55);
+      --elev-2: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.35), 0 14px 30px -12px oklch(0 0 0 / 0.65);
+      --elev-btn: inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.45);
+      --sunk: inset 0 1px 3px oklch(0 0 0 / 0.45);
+      --surface-grad: linear-gradient(180deg, oklch(0.225 0.011 260), oklch(0.205 0.01 260));
+      --btn-grad: linear-gradient(180deg, oklch(0.255 0.012 260), oklch(0.225 0.011 260));
+      --indigo-grad: linear-gradient(180deg, oklch(0.78 0.11 268), oklch(0.71 0.125 268));
+      --indigo-glow: 0 6px 16px -8px oklch(0.74 0.12 268 / 0.55);
       color-scheme: dark;
     }
     /* ---------- Marķieri: gaišā tēma (diena) ---------- */
     body.light-mode {
-      --bg: oklch(0.975 0.003 260);
+      --bg: oklch(0.962 0.004 260);
       --surface: #ffffff;
       --surface-2: oklch(0.965 0.004 260);
       --surface-3: oklch(0.945 0.006 260);
@@ -121,6 +131,15 @@
       --local-text-2: oklch(0.78 0.01 260);
       --shadow-pop: 0 18px 40px -18px oklch(0.2 0.02 260 / 0.35);
       --scrim: oklch(0.2 0.02 260 / 0.38);
+      --hl: inset 0 1px 0 oklch(1 0 0 / 0.9);
+      --elev-1: 0 1px 2px oklch(0.25 0.02 260 / 0.08), 0 8px 22px -10px oklch(0.25 0.02 260 / 0.18);
+      --elev-2: 0 2px 4px oklch(0.25 0.02 260 / 0.06), 0 16px 34px -14px oklch(0.25 0.02 260 / 0.22);
+      --elev-btn: inset 0 1px 0 oklch(1 0 0 / 0.9), 0 1px 2px oklch(0.25 0.02 260 / 0.10);
+      --sunk: inset 0 1px 3px oklch(0.25 0.02 260 / 0.10);
+      --surface-grad: linear-gradient(180deg, #ffffff, oklch(0.99 0.002 260));
+      --btn-grad: linear-gradient(180deg, #ffffff, oklch(0.975 0.003 260));
+      --indigo-grad: linear-gradient(180deg, oklch(0.55 0.17 268), oklch(0.47 0.17 268));
+      --indigo-glow: 0 6px 16px -8px oklch(0.50 0.17 268 / 0.55);
       color-scheme: light;
     }
     /* Vecie marķieru nosaukumi — tos lieto iekļautie style="" skriptos */
@@ -157,9 +176,11 @@
       --accent-green-subtle: var(--ok-soft);
       --radius-xs: 6px; --radius-sm: 8px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 18px; --radius-full: 999px;
       --side-w: 264px;
-      --top-h: 0px;
       --tap: 44px;
     }
+    /* Lipīgo slāņu nobīdes raksta syncSticky() uz :root — tāpēc noklusējums arī uz :root,
+       nevis body (body vērtība aizsegtu skripta vērtību visiem pēcnācējiem). */
+    :root { --top-h: 0px; --search-h: 0px; }
 
     /* ---------- Bāze ---------- */
     *, *::before, *::after { box-sizing: border-box; }
@@ -687,6 +708,67 @@
     #patient-input-problems { background: var(--danger-soft) !important; border: 0 !important; color: var(--text); }
 
     /* ============================================================
+       TILPUMS (V3.1) — mīkstas ēnas un reljefs. Krāsas, burti un izkārtojums
+       nemainās: virsmas nedaudz paceltas, pogas reljefas, ievades lauki iegremdēti.
+       ============================================================ */
+    .card, .fx-results, .protocol-detail-view, .calc-nav, .protocol-sidebar, .interaction-card, .topic-links {
+      box-shadow: var(--elev-1);
+    }
+    .card, .fx-results, .protocol-detail-view, .calc-nav, .protocol-sidebar { background-image: var(--surface-grad); }
+    .fx-results { background-image: none; }
+    .modal-box { box-shadow: var(--elev-2), var(--shadow-pop); }
+    #drug-detail-modal .modal-box { box-shadow: -18px 0 40px -18px oklch(0 0 0 / 0.45); }
+    .app-top { box-shadow: 0 1px 0 var(--line), 0 10px 18px -16px oklch(0 0 0 / 0.35); }
+    .side { box-shadow: inset -1px 0 0 var(--line); border-right: 0; }
+    .brand-mark { background-color: var(--indigo); background-image: var(--indigo-grad); box-shadow: var(--indigo-glow), inset 0 1px 0 oklch(1 0 0 / 0.25); }
+
+    /* Pogas un čipi — reljefs; nospiežot — iespiežas */
+    .btn-secondary, .btn-copy, .chip, .chip-select select, .theme-toggle, .btn-patient-edit, .btn-icon,
+    .code-chip, .pf-seg button, .pf-step button, .patient-chip, .sader-switch button.on, .back-btn, .proto-toc button {
+      box-shadow: var(--elev-btn);
+    }
+    .btn-secondary, .btn-copy, .chip:not(.active), .chip-select:not(.on) select, .theme-toggle, .btn-patient-edit,
+    .pf-seg button:not(.on), .pf-step button, .patient-chip { background-image: var(--btn-grad); }
+    .btn-primary, .code-chip.active, .pf-seg button.on, .chip.active, .chip-select.on select {
+      box-shadow: var(--indigo-glow), inset 0 1px 0 oklch(1 0 0 / 0.18);
+    }
+    .btn-primary, .code-chip.active, .pf-seg button.on { background-color: var(--indigo); background-image: var(--indigo-grad); }
+    .chip.active, .chip-select.on select { box-shadow: 0 4px 12px -6px oklch(0 0 0 / 0.45), inset 0 1px 0 oklch(1 0 0 / 0.12); }
+    .btn:active, .btn-copy:active, .chip:active, .code-chip:active, .pf-seg button:active, .pf-step button:active,
+    .btn-icon:active, .theme-toggle:active, .patient-chip:active, .bn-item:active {
+      box-shadow: var(--sunk); transform: translateY(1px);
+    }
+    .btn, .btn-copy, .chip, .code-chip, .pf-seg button, .pf-step button, .btn-icon, .theme-toggle, .patient-chip {
+      transition: box-shadow .15s ease, transform .1s ease, background-color .15s ease;
+    }
+
+    /* Iegremdētie lauki un sliedes */
+    .search-input, .calc-nav-search, #protocol-search, .calc-input, .calc-select, .pf-step input { box-shadow: var(--sunk); }
+    .search-input:focus, .calc-input:focus, .calc-select:focus, .pf-step input:focus { box-shadow: var(--sunk), 0 0 0 3px var(--indigo-soft); }
+    .seg, .sader-switch { box-shadow: var(--sunk); }
+    .seg .chip { box-shadow: none; background-image: none; }
+    .seg .chip.active { box-shadow: var(--elev-btn), 0 1px 3px oklch(0 0 0 / 0.18); background-image: var(--btn-grad); }
+    .pf-scale .track { box-shadow: var(--sunk); }
+    .pf-scale .marker { box-shadow: 0 0 0 2px var(--surface-2), var(--indigo-glow); }
+
+    /* Rezultāti — iegremdēts «displejs» kā sūknim */
+    .calc-results-box { box-shadow: var(--sunk); }
+    .pf-result { box-shadow: var(--sunk), 0 0 0 1px var(--indigo-line), 0 10px 24px -14px oklch(0.74 0.12 268 / 0.45); border-color: transparent; }
+
+    /* Saraksts un kartes sadaļas */
+    .fx-group-head { background-image: linear-gradient(180deg, var(--surface-2), color-mix(in srgb, var(--surface-3) 45%, var(--surface-2))); }
+    .fx-row { transition: background-color .12s ease, box-shadow .12s ease; }
+    .fx-row:hover { box-shadow: inset 3px 0 0 var(--indigo); }
+    .profile-section.open { box-shadow: inset 3px 0 0 var(--indigo), var(--hl); }
+    .patient-badge.key { box-shadow: var(--hl), 0 2px 8px -4px oklch(0 0 0 / 0.25); }
+    .warn-banner { box-shadow: var(--elev-1); }
+    .topic-body .local { box-shadow: var(--elev-2); }
+    .topic-body blockquote { box-shadow: var(--hl); }
+    .renal-table { box-shadow: var(--elev-1); }
+    .nav-tab.active, .fx-dept.active, .calc-nav-item.active, .protocol-list-item.active { box-shadow: var(--hl), 0 2px 8px -5px oklch(0 0 0 / 0.30); }
+    .toast { box-shadow: var(--elev-2), var(--shadow-pop); }
+
+    /* ============================================================
        TELEFONS UN ŠAURI EKRĀNI (< 900 px)
        ============================================================ */
     @media (max-width: 899px) {
@@ -715,6 +797,8 @@
       .patient-chip.danger .crcl { color: var(--danger-text); }
       .app-main { padding: 0 16px calc(96px + env(safe-area-inset-bottom)); }
       .macos-footer { padding: 14px 16px calc(100px + env(safe-area-inset-bottom)); }
+      .fx-results, .protocol-detail-view { box-shadow: none; background-image: none; }
+      .bottom-nav { box-shadow: 0 -10px 24px -18px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.04); }
       .bottom-nav {
         display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
         height: calc(64px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
@@ -4473,7 +4557,7 @@
     /* Statusa joslas krāsa seko lietotnes tēmai, nevis tikai sistēmas iestatījumam. */
     var tc = document.querySelector('meta[name="theme-color"]');
     function syncThemeColor() {
-      if (tc) tc.setAttribute('content', document.body.classList.contains('light-mode') ? '#f5f7f9' : '#0b0d11');
+      if (tc) tc.setAttribute('content', document.body.classList.contains('light-mode') ? '#f1f2f5' : '#0b0d11');
     }
     syncThemeColor();
     new MutationObserver(syncThemeColor).observe(document.body, { attributes: true, attributeFilter: ['class'] });
